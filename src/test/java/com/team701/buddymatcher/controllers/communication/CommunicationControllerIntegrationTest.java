@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @AutoConfigureMockMvc
 @Sql(scripts = "/communication_data.sql")
-@Sql(scripts = "/communication_cleanup_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/cleanup_data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class CommunicationControllerIntegrationTest {
 
     @Autowired
@@ -62,6 +62,22 @@ public class CommunicationControllerIntegrationTest {
                 .andExpect(jsonPath("$[1].content").value("Yo HARRO"))
                 .andExpect(jsonPath("$[1].timestamp").value("1647394821000"))
                 .andExpect(jsonPath("$[1].read").value(false))
+                .andDo(print());
+    }
+
+    @Test
+    void getChatList() throws Exception {
+        mvc.perform(get("/api/communication/chatlist")
+                        .sessionAttrs(Collections.singletonMap("UserId", 1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(2))
+                .andExpect(jsonPath("$[0].name").value("Green Dinosaur"))
+                .andExpect(jsonPath("$[0].lastMessage").value("Yo HARRO"))
+                .andExpect(jsonPath("$[0].timestamp").value("1647394821000"))
+                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].name").value("Hiruna Smith"))
+                .andExpect(jsonPath("$[1].lastMessage").isEmpty())
+                .andExpect(jsonPath("$[1].timestamp").isEmpty())
                 .andDo(print());
     }
 }

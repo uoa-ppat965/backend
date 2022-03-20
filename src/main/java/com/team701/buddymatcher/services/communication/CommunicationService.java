@@ -13,4 +13,8 @@ public interface CommunicationService {
     void readMessages(Long userId, Long buddyId);
 
     void sendMessage(Message message);
+
+    Message getLastMessage(Long userId, Long buddyId);
+
+    void addMessage(Long userId, Long buddyId, String message);
 }

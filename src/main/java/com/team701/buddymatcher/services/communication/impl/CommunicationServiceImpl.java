@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation for the CommunicationService which is a service providing the implementations of the methods
+ * for the communication endpoints
+ */
 @Service
 public class CommunicationServiceImpl implements CommunicationService {
 
@@ -31,5 +35,15 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     public void sendMessage(Message message) {
         messageRepository.save(message);
+    }
+
+    @Override
+    public Message getLastMessage(Long userId, Long buddyId) {
+        return messageRepository.findLastMessageBetweenUsers(userId, buddyId);
+    }
+
+    @Override
+    public void addMessage(Long userId, Long buddyId, String message) {
+        messageRepository.createMessage(userId, buddyId, message);
     }
 }
